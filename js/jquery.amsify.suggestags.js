@@ -29,6 +29,7 @@ var AmsifySuggestags;
 			whiteList         : false,
 			afterAdd          : {},
 			afterRemove       : {},
+			addTagOnBlur      : true,
 			selectOnHover     : true,
 			triggerChange     : false,
 			noSuggestionMsg   : "",
@@ -158,7 +159,22 @@ var AmsifySuggestags;
 
 		setTagEvents : function() {
 			var _self = this,
-                            selectors = _self.selectors;
+                            selectors = _self.selectors,
+
+                            appendTag = function($input, isDelimiter) {
+				var value = $.trim($input.text().replace(/,/g , "")); // AK: originally was used .val() for input field instead of .text().
+				if (isDelimiter) {
+					$.each(_self.settings.delimiters, function(dkey, delimiter) {
+						value = $.trim(value.replace(delimiter, ""));
+					});
+				}
+
+				$input.text(""); // AK: originally was used .val() for input field instead of .text().
+				_self.addTag(_self.getValue(value));
+				if (_self.settings.showAllSuggestions) {
+					_self.suggestWhiteList("", 0, true);
+				}
+                            };
 
 			$(selectors.sTagsInput).focus(function() {
 			        var $input = $(this).parent();
@@ -180,48 +196,47 @@ var AmsifySuggestags;
 			});
 
 			$(selectors.sTagsInput).blur(function() {
-				$(this).closest(_self.classes.inputArea).removeClass(_self.classes.focus.substring(1));
-				if (!$(this).text()) { // AK: originally used .val() for input field instead of .text().
+				var $input = $(this);
+
+				$input.closest(_self.classes.inputArea).removeClass(_self.classes.focus.substring(1));
+
+				if ($input.text()) { // AK: originally used .val() for input field instead of .text().
+					if (_self.settings.addTagOnBlur)
+						appendTag($input);
+				}else {
 					$(selectors.listArea).hide();
 				}
 			});
 
 			$(selectors.sTagsInput).keyup(function(e) {
-				var key = e.key;
+				var $input = $(this),
+                                    key = e.key;
+
 				if (!key) {
-				  if (13 === e.keyCode)
-					key = "Enter";
-				  else if (188 === e.keyCode)
-					key = ",";
+					if (13 === e.keyCode)
+						key = "Enter";
+					else if (188 === e.keyCode)
+						key = ",";
                                 }
 
 				var isDelimiter = !!(-1 !== $.inArray(key, _self.settings.delimiters));
 				if (("Enter" === key)  || ("," === key)  || isDelimiter) {
-					var value = $.trim($(this).text().replace(/,/g , "")); // AK: originally was used .val() for input field instead of .text().
-					if (isDelimiter) {
-						$.each(_self.settings.delimiters, function(dkey, delimiter) {
-							value = $.trim(value.replace(delimiter, ""));
-						});
-					}
-					$(this).text(""); // AK: originally was used .val() for input field instead of .text().
-					_self.addTag(_self.getValue(value));
-					if (_self.settings.showAllSuggestions) {
-						_self.suggestWhiteList("", 0, true);
-					}
-				}else if (8 === e.keyCode && !$(this).text()) { // AK: originally used .val() for input field instead of .text().
+					appendTag($input, isDelimiter);
+
+				}else if (8 === e.keyCode && !$input.text()) { // AK: originally used .val() for input field instead of .text().
 					var removeClass = _self.classes.readyToRemove.substring(1);
-					if ($(this).hasClass(removeClass)) {
-						_self.removeTagByItem($(this).closest(_self.classes.inputArea).find(_self.classes.tagItem + ":last"), false);
+					if ($input.hasClass(removeClass)) {
+						_self.removeTagByItem($input.closest(_self.classes.inputArea).find(_self.classes.tagItem + ":last"), false);
 					}else {
-						$(this).addClass(removeClass);
+						$input.addClass(removeClass); // so next time last item will be removed on backspace.
 					}
 					$(selectors.listArea).hide();
 					if (_self.settings.showAllSuggestions) {
 						_self.suggestWhiteList("", 0, true);
 					}
-				}else if ((_self.settings.suggestions.length || _self.isSuggestAction()) && ($(this).text() || _self.settings.showAllSuggestions)) { // AK: originally used .val() for input field instead of .text().
-					$(this).removeClass(_self.classes.readyToRemove.substring(1));
-					_self.processWhiteList(e.keyCode, $(this).text()); // AK: originally used .val() for input field instead of .text().
+				}else if ((_self.settings.suggestions.length || _self.isSuggestAction()) && ($input.text() || _self.settings.showAllSuggestions)) { // AK: originally used .val() for input field instead of .text().
+					$input.removeClass(_self.classes.readyToRemove.substring(1));
+					_self.processWhiteList(e.keyCode, $input.text()); // AK: originally used .val() for input field instead of .text().
 				}
 			});
 
@@ -374,11 +389,14 @@ var AmsifySuggestags;
 			    isActive  = 0;
 
 			$(_self.selectors.listArea).find(_self.classes.listItem + ":visible").each(function() {
-				if ($(this).hasClass("active")) {
-					$(this).removeClass("active");
-					var $item = ("up" === type) ?
-						        $(this).prevAll(_self.classes.listItem + ":visible:first") :
-						        $(this).nextAll(_self.classes.listItem + ":visible:first");
+			        var $item = $(this);
+				if ($item.hasClass("active")) {
+					$item.removeClass("active");
+
+					// replace $item
+					$item = ("up" === type) ?
+							$item.prevAll(_self.classes.listItem + ":visible:first") :
+							$item.nextAll(_self.classes.listItem + ":visible:first");
 
 					if ($item.length) {
 						isActive = 1;
@@ -504,11 +522,11 @@ var AmsifySuggestags;
 					tag   = item;
 				}
 
-				listHTML += '<li class="'+_self.classes.listItem.substring(1)+'" data-val="'+value+'">' + tag + '</li>';
+				listHTML += '<li class="' + _self.classes.listItem.substring(1) + '" data-val="' + value + '">' + tag + '</li>';
 			});
 
 			if (_self.settings.noSuggestionMsg)
-				listHTML += '<li class="'+_self.classes.noSuggestion.substring(1)+'">' + _self.settings.noSuggestionMsg + '</li>';
+				listHTML += '<li class="' + _self.classes.noSuggestion.substring(1) + '">' + _self.settings.noSuggestionMsg + '</li>';
 
 			return listHTML;
 		},
