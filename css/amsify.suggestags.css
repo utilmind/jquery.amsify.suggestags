@@ -1,4 +1,4 @@
-.amsify-suggestags-area {
+.amsify-suggestags-area { /* added by AK */
 	width: 100%;
 }
 
@@ -26,7 +26,7 @@
 .amsify-suggestags-input {
 	padding: 0 4px;
 	border: 0;
-	display: inline-block;
+	display: inline-block; /* AK: required for <div>-based input */
 }
 
 .amsify-suggestags-area
