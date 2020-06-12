@@ -1,6 +1,10 @@
+.amsify-suggestags-area {
+	width: 100%;
+}
+
 .amsify-suggestags-area
 .amsify-suggestags-input-area-default {
-	cursor: pointer;
+    cursor: pointer;
     border: 1px solid #cccccc;
     min-height: 20px;
     padding: 8px 5px;
@@ -20,9 +24,9 @@
 .amsify-suggestags-area
 .amsify-suggestags-input-area
 .amsify-suggestags-input {
-	max-width: 200px;
-	padding: 0px 4px;
+	padding: 0 4px;
 	border: 0;
+	display: inline-block;
 }
 
 .amsify-suggestags-area
@@ -68,7 +72,7 @@
 .amsify-suggestags-list
 ul.amsify-list {
 	list-style: none;
-	padding: 3px 0px;
+	padding: 3px 0;
 	max-height: 150px;
     overflow-y: auto;
 }
@@ -79,7 +83,7 @@ ul.amsify-list
 li.amsify-list-item {
 	text-align: left;
     cursor: pointer;
-    padding: 0px 10px;	
+    padding: 0 10px;	
 }
 
 .amsify-suggestags-area
@@ -98,7 +102,7 @@ li.amsify-list-item:active {
 ul.amsify-list
 li.amsify-list-group {
 	text-align: left;
-    padding: 0px 10px;
+    padding: 0 10px;
     font-weight: bold;
 }
 
@@ -142,7 +146,7 @@ li.amsify-item-pad.active {
 .amsify-suggestags-input-area
 .amsify-select-tag {
     padding: 2px 7px;
-    margin: 0px 4px 1px 0px;
+    margin: 0 4px 1px 0;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
