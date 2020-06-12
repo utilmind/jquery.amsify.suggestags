@@ -9,12 +9,12 @@ var AmsifySuggestags;
 (function(factory) {
 	if ("object" === typeof module && "object" === typeof module.exports) {
 		factory(require("jquery"), window, document);
-	} else {
+	}else {
 		factory(jQuery, window, document);
 	}
 }
 (function($, window, document, undefined) {
-	
+
 	AmsifySuggestags = function(selector) {
 		this.selector = selector;
 		this.settings = {
@@ -35,7 +35,7 @@ var AmsifySuggestags;
 			noSuggestionMsg   : "",
 			showAllSuggestions: false,
 			keepLastOnHoverTag: true,
-			printValues 	  : true, // set to false to disable debug
+			printValues 	  : false, // AK: originally it was TRUE for debug purposes, but we really don't need it in real projects.
 			checkSimilar 	  : true,
 			delimiters        : []
 		};
@@ -72,7 +72,7 @@ var AmsifySuggestags;
 			inputType     : null,
 		};
 		this.isRequired = false;
-		this.ajaxActive = false; 
+		this.ajaxActive = false;
 		this.tagNames   = [];
 	};
 	AmsifySuggestags.prototype = {
@@ -81,7 +81,7 @@ var AmsifySuggestags;
 		* @type {object}
 		*/
 		_settings : function(settings) {
-			this.settings = $.extend(true, {}, this.settings, settings);      
+			this.settings = $.extend(true, {}, this.settings, settings);
 		},
 
 		_setMethod : function(method) {
@@ -283,7 +283,7 @@ var AmsifySuggestags;
 						return false; // break each()
 
 					}else if (item === value) {
-						return false; // break each() 
+						return false; // break each()
 					}
 				});
 				return tag;
@@ -302,7 +302,7 @@ var AmsifySuggestags;
 						return false; // break each()
 					}
 					else if (item.toString().toLowerCase() === lower) {
-						return false; // break each() 
+						return false; // break each()
 					}
 				});
 				return value;
@@ -591,7 +591,7 @@ var AmsifySuggestags;
 						if (item.value.toString().toLowerCase() === lower) {
 							itemKey = key;
 							return false; // break each()
-						}  
+						}
 					}else if (item.toString().toLowerCase() === lower) {
 						itemKey = key;
 						return false; // break each()
