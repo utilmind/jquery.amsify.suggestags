@@ -1,3 +1,9 @@
+AK 12.06.2020:
+
+This is improved fork of amsify.suggestags. I have switched from &lt;input&gt; to editable &lt;div&gt; inside the input area, in order to have the input box with size of while input area, right to the items that already entered.
+
+-----------------
+
 Jquery Suggestags
 -----------------
 This is a JQuery plugin for input tags with auto complete suggestion.
