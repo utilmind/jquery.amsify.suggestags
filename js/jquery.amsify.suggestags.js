@@ -27,6 +27,7 @@ var AmsifySuggestags;
 			backgrounds       : [],
 			colors            : [],
 			whiteList         : false,
+			prepareTag        : {}, // Prepare to add callback, triggered before adding typed text. Should return modified string for tag.
 			afterAdd          : {},
 			afterRemove       : {},
 			addTagOnBlur      : true,
@@ -534,20 +535,25 @@ var AmsifySuggestags;
 		addTag : function(value) {
 			if (value) {
 				var me = this,
-                                    $item = $('<span class="' + me.classes.tagItem.substring(1) + '" data-val="' + value + '">' + me.getTag(value) + " " + me.setIcon() + "</span>")
+                                    settings = me.settings;
+
+			        if (settings.prepareTag && ("function" === typeof settings.prepareTag))
+                                  value = settings.prepareTag(value);
+
+				var $item = $('<span class="' + me.classes.tagItem.substring(1) + '" data-val="' + value + '">' + me.getTag(value) + " " + me.setIcon() + "</span>")
                                                 .insertBefore($(me.selectors.sTagsInput));
 
-				if (me.settings.defaultTagClass)
-					$item.addClass(me.settings.defaultTagClass);
+				if (settings.defaultTagClass)
+					$item.addClass(settings.defaultTagClass);
 
-				if ((-1 !== me.settings.tagLimit) && (0 < me.settings.tagLimit) && (me.tagNames.length >= me.settings.tagLimit)) {
+				if ((-1 !== settings.tagLimit) && (0 < settings.tagLimit) && (me.tagNames.length >= settings.tagLimit)) {
 					me.animateRemove($item, true);
 					me.flashItem(value);
 					return false;
 				}
 
 				var itemKey = me.getItemKey(value);
-				if (me.settings.whiteList && (-1 === itemKey)) {
+				if (settings.whiteList && (-1 === itemKey)) {
 					me.animateRemove($item, true);
 					me.flashItem(value);
 					return false;
@@ -565,13 +571,13 @@ var AmsifySuggestags;
 					me.tagNames.push(dataVal);
 					me.setRemoveEvent();
 					me.setInputValue();
-					if (me.settings.afterAdd && ("function" === typeof me.settings.afterAdd)) {
-						me.settings.afterAdd(value);
+					if (settings.afterAdd && ("function" === typeof settings.afterAdd)) {
+						settings.afterAdd(value);
 					}
 				}
 				$(me.selector).trigger("suggestags.add", [value]);
 				$(me.selector).trigger("suggestags.change");
-				if (me.settings.triggerChange)
+				if (settings.triggerChange)
 					$(me.selector).trigger("change");
 
 				$(me.selectors.listArea).find(me.classes.listItem).removeClass("active");
