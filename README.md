@@ -2,6 +2,8 @@
 
 This is improved fork of amsify.suggestags. I have switched from &lt;input&gt; to editable &lt;div&gt; inside the input area, in order to have the input box with size of while input area, right to the items that already entered.
 
+<b>Live demo is at https://utilmind.com/demos/2020/tagsinput/</b>
+
 Below is the original authors notes...
 
 -----------------
