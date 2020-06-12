@@ -2,7 +2,9 @@
 
 This is improved fork of amsify.suggestags. I have switched from &lt;input&gt; to editable &lt;div&gt; inside the input area, in order to have the input box with size of while input area, right to the items that already entered.
 
-UPD. Also added ```addTagOnBlur``` option to settings, so new tag automatically added on blur (unfocus) of input field.
+UPD. Also
+  1. added ```addTagOnBlur``` option to settings, so new tag automatically added on blur (unfocus) of input field.
+  2. Added ```prepareTag``` callback, to modify tag (eg to change characters case) just before adding it. (In live demo by link below, the first input always have uppercased first character).
 
 <b>Live demo is at https://utilmind.com/demos/2020/tagsinput/</b>
 
