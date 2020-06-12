@@ -162,9 +162,6 @@ var AmsifySuggestags;
 
 			$(selectors.sTagsInput).focus(function() {
 			        var $input = $(this).parent();
-//			        $input.html($input.html().substring(5));
-//$input.html('<div contenteditable="plaintext-only"' + $input.html().substring(6));
-//$input = $input.find("[contenteditable]").focus();
 
 			   /**
 				* Show all suggestions if setting set to true
@@ -318,7 +315,7 @@ var AmsifySuggestags;
 				ajaxFormParams["timeout"] = this.settings.suggestionsAction.timeout * 1000;
 			}
 
-			if (this.settings.suggestionsAction.beforeSend !== undefined && typeof this.settings.suggestionsAction.beforeSend === "function") {
+			if (this.settings.suggestionsAction.beforeSend !== undefined && ("function" === typeof this.settings.suggestionsAction.beforeSend)) {
 				ajaxFormParams["beforeSend"] = this.settings.suggestionsAction.beforeSend;
 			}
 
@@ -331,17 +328,17 @@ var AmsifySuggestags;
 					_self.suggestWhiteList(value, keycode);
 				}
 
-				if (_self.settings.suggestionsAction.success !== undefined && typeof _self.settings.suggestionsAction.success === "function") {
+				if (_self.settings.suggestionsAction.success !== undefined && ("function" === typeof _self.settings.suggestionsAction.success)) {
 					_self.settings.suggestionsAction.success(data);
 				}
 			};
 
-			if (this.settings.suggestionsAction.error !== undefined && typeof this.settings.suggestionsAction.error === "function") {
+			if (this.settings.suggestionsAction.error !== undefined && ("function" === typeof this.settings.suggestionsAction.error)) {
 				ajaxFormParams["error"] = this.settings.suggestionsAction.error;
 			}
 
 			ajaxFormParams["complete"] = function(data) {
-				if (_self.settings.suggestionsAction.complete !== undefined && typeof _self.settings.suggestionsAction.complete === "function") {
+				if (_self.settings.suggestionsAction.complete !== undefined && ("function" === typeof _self.settings.suggestionsAction.complete)) {
 					_self.settings.suggestionsAction.complete(data);
 				}
 
