@@ -1,13 +1,24 @@
+.amsify-suggestags-input[placeholder]:empty:before {
+    content: attr(placeholder);
+    font-weight: normal;
+    font-style: italic;
+    color: #6c757d; /* bootstrap color placeholders */
+}
+
+.amsify-suggestags-input[placeholder]:empty:focus:before {
+    content: "";
+}
+
 .amsify-suggestags-area { /* added by AK */
 	width: 100%;
 }
 
 .amsify-suggestags-area
 .amsify-suggestags-input-area-default {
-    cursor: pointer;
-    border: 1px solid #cccccc;
-    min-height: 20px;
-    padding: 8px 5px;
+	cursor: pointer;
+	border: 1px solid #cccccc;
+	min-height: 20px;
+	padding: 8px 5px;
 }
 
 .amsify-suggestags-area
@@ -65,7 +76,7 @@
 	position: absolute;
 	background: white;
 	border: 1px solid #dedede;
-	z-index: 1;
+	z-index: 999;/*1;*/
 }
 
 .amsify-suggestags-area
@@ -74,7 +85,7 @@ ul.amsify-list {
 	list-style: none;
 	padding: 3px 0;
 	max-height: 150px;
-    overflow-y: auto;
+	overflow-y: auto;
 }
 
 .amsify-suggestags-area
@@ -82,8 +93,8 @@ ul.amsify-list {
 ul.amsify-list
 li.amsify-list-item {
 	text-align: left;
-    cursor: pointer;
-    padding: 0 10px;
+	cursor: pointer;
+	padding: 0 10px;
 }
 
 .amsify-suggestags-area
@@ -102,25 +113,25 @@ li.amsify-list-item:active {
 ul.amsify-list
 li.amsify-list-group {
 	text-align: left;
-    padding: 0 10px;
-    font-weight: bold;
+	padding: 0 10px;
+	font-weight: bold;
 }
 
 .amsify-suggestags-area
 .amsify-suggestags-list
 ul.amsify-list
 li.amsify-item-pad {
-    padding-left: 30px;
+	 padding-left: 30px;
 }
 
 .amsify-suggestags-area
 .amsify-suggestags-list
 ul.amsify-list
 li.amsify-item-noresult {
-    display: none;
-    color: #ff6060;
-    font-weight: bold;
-    text-align: center;
+	display: none;
+	color: #ff6060;
+	font-weight: bold;
+	text-align: center;
 }
 
 .amsify-suggestags-area
@@ -143,20 +154,27 @@ li.amsify-item-pad.active {
 	font-weight: normal;
 }
 
+/*
+.amsify-suggestags-area
+.amsify-suggestags-input-area {
+	min-height: 40px; // set it for empty input box to avoid jumps/shifts when start typing
+}
+ */
+
 .amsify-suggestags-input-area
 .amsify-select-tag {
     padding: 2px 7px;
-    margin: 0 4px 1px 0;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+    margin: 0 4px 2px 0; /* +2 for multiline tags. But make inputArea 2px less in JS */
+    -webkit-border-radius: 5px; /* originally 2px */
+    -moz-border-radius: 5px;
+    border-radius: 5px;
     display: inline-block;
 }
 
 .amsify-suggestags-input-area
 .amsify-select-tag.col-bg {
 	background: #d8d8d8;
-    color: black;
+	color: black;
 }
 
 /*.amsify-suggestags-input-area
