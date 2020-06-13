@@ -31,9 +31,11 @@ var AmsifySuggestags;
 			afterAdd          : {},
 			afterRemove       : {},
 			addTagOnBlur      : true,
-			selectOnHover     : true,
+			selectOnHover     : false, // it's absolutely useless option, which makes me mad if I leave my cursor pointer little bit under the input box and trying to type something.
+			selectSimilar     : true,
 			triggerChange     : false,
 			noSuggestionMsg   : "",
+			highlightSuggestion:true,
 			showAllSuggestions: false,
 			keepLastOnHoverTag: true,
 			printValues 	  : false, // AK: originally it was TRUE for debug purposes, but we really don't need it in real projects.
@@ -90,43 +92,43 @@ var AmsifySuggestags;
 		},
 
 		_init : function() {
-		        var me = this;
+		        var _self = this;
 
-			if (me.checkMethod()) {
-				me.name = ($(me.selector).attr("name")) ? $(me.selector).attr("name") + "_amsify" : "amsify_suggestags";
-				me.createHTML();
-				me.setEvents();
-				$(me.selector).hide();
-				me.setDefault();
+			if (_self.checkMethod()) {
+				_self.name = ($(_self.selector).attr("name")) ? $(_self.selector).attr("name") + "_amsify" : "amsify_suggestags";
+				_self.createHTML();
+				_self.setEvents();
+				$(_self.selector).hide();
+				_self.setDefault();
 			}
 		},
 
 		createHTML : function() {
-		        var me = this,
-			    HTML                  = '<div class="' + me.classes.sTagsArea.substring(1) + '"></div>';
-			me.selectors.sTagsArea  = $(HTML).insertAfter(me.selector);
+		        var _self = this,
+			    HTML                  = '<div class="' + _self.classes.sTagsArea.substring(1) + '"></div>';
+			_self.selectors.sTagsArea  = $(HTML).insertAfter(_self.selector);
 
-			var labelHTML             = '<div class="' + me.classes.inputArea.substring(1) + '"></div>';
-			me.selectors.inputArea  = $(labelHTML).appendTo(me.selectors.sTagsArea);
-			me.defaultLabel         = ($(me.selector).attr("placeholder") !== undefined) ? $(me.selector).attr("placeholder") : me.defaultLabel;
+			var labelHTML             = '<div class="' + _self.classes.inputArea.substring(1) + '"></div>';
+			_self.selectors.inputArea  = $(labelHTML).appendTo(_self.selectors.sTagsArea);
+			_self.defaultLabel         = ($(_self.selector).attr("placeholder") !== undefined) ? $(_self.selector).attr("placeholder") : _self.defaultLabel;
 
-			var sTagsInput            = '<div contenteditable="plaintext-only" type="text" class="'+me.classes.sTagsInput.substring(1)+'" placeholder="'+me.defaultLabel+'">';
-			me.selectors.sTagsInput = $(sTagsInput).appendTo(me.selectors.inputArea).attr("autocomplete", "off");
-			if ($(me.selector).attr("required")) {
-				$(me.selector).removeAttr("required");
-				me.isRequired = true;
-				me.updateIsRequired();
+			var sTagsInput            = '<div contenteditable="plaintext-only" type="text" class="'+_self.classes.sTagsInput.substring(1)+'" placeholder="'+_self.defaultLabel+'">';
+			_self.selectors.sTagsInput = $(sTagsInput).appendTo(_self.selectors.inputArea).attr("autocomplete", "off");
+			if ($(_self.selector).attr("required")) {
+				$(_self.selector).removeAttr("required");
+				_self.isRequired = true;
+				_self.updateIsRequired();
 			}
 
-			var listArea              = '<div class="'+me.classes.listArea.substring(1)+'"></div>';
-			me.selectors.listArea   = $(listArea).appendTo(me.selectors.sTagsArea);
-			$(me.selectors.listArea).width($(me.selectors.sTagsArea).width() - 3);
+			var listArea              = '<div class="'+_self.classes.listArea.substring(1)+'"></div>';
+			_self.selectors.listArea   = $(listArea).appendTo(_self.selectors.sTagsArea);
+//			$(_self.selectors.listArea).width($(_self.selectors.sTagsArea).width() - 3);
 
-			var list                  = '<ul class="'+me.classes.list.substring(1)+'"></ul>';
-			me.selectors.list       = $(list).appendTo(me.selectors.listArea);
+			var list                  = '<ul class="'+_self.classes.list.substring(1)+'"></ul>';
+			_self.selectors.list       = $(list).appendTo(_self.selectors.listArea);
 
-			me.updateSuggestionList();
-			me.fixCSS();
+			_self.updateSuggestionList();
+			_self.fixCSS();
 		},
 
 		updateIsRequired : function() {
@@ -161,6 +163,7 @@ var AmsifySuggestags;
 		setTagEvents : function() {
 			var _self = this,
                             selectors = _self.selectors,
+                            $input = $(selectors.sTagsInput);
 
                             appendTag = function($input, isDelimiter) {
 				var value = $.trim($input.text().replace(/,/g , "")); // AK: originally was used .val() for input field instead of .text().
@@ -177,8 +180,8 @@ var AmsifySuggestags;
 				}
                             };
 
-			$(selectors.sTagsInput).focus(function() {
-			        var $input = $(this).parent();
+			$input.focus(function() {
+			        var $inputParent = $(this).parent();
 
 			   /**
 				* Show all suggestions if setting set to true
@@ -186,9 +189,9 @@ var AmsifySuggestags;
 				if (_self.settings.showAllSuggestions) {
 					_self.suggestWhiteList("", 0, 1);
 				}
-				$input.closest(_self.classes.inputArea).addClass(_self.classes.focus.substring(1));
+				$inputParent.closest(_self.classes.inputArea).addClass(_self.classes.focus.substring(1));
 				if ("materialize" === _self.settings.type) {
-					$input.css({
+					$inputParent.css({
 						"border-bottom": "none",
 						"-webkit-box-shadow": "none",
 						"box-shadow": "none",
@@ -196,7 +199,7 @@ var AmsifySuggestags;
 				}
 			});
 
-			$(selectors.sTagsInput).blur(function() {
+			$input.blur(function() { // we already have $input above, but this is for sure that we're in correct instance
 				var $input = $(this);
 
 				$input.closest(_self.classes.inputArea).removeClass(_self.classes.focus.substring(1));
@@ -209,8 +212,8 @@ var AmsifySuggestags;
 				}
 			});
 
-			$(selectors.sTagsInput).keyup(function(e) {
-				var $input = $(this),
+			$input.keyup(function(e) {
+				var $input = $(this), // we already have $input above, but this is for sure that we're in correct instance
                                     key = e.key;
 
 				if (!key) {
@@ -241,34 +244,45 @@ var AmsifySuggestags;
 				}
 			});
 
-			$(selectors.sTagsInput).keypress(function(e) {
+			$input.keypress(function(e) {
 				if (13 === e.keyCode) return false;
 			});
 
 			$(selectors.sTagsArea).click(function() {
-				$(selectors.sTagsInput).focus();
+			        if (!$input.is(":focus"))
+					$input.focus();
 			});
 		},
 
 		setSuggestionsEvents : function() {
-			var _self = this;
-			if (_self.settings.selectOnHover) {
-				$(_self.selectors.listArea).find(this.classes.listItem).hover(function() {
-					$(_self.selectors.listArea).find(_self.classes.listItem).removeClass("active");
+			var _self = this,
+                            settings = _self.settings,
+                            selectors = _self.selectors;
+
+                        // AK: Of course we always hightlight the item under mouse, but don't always want to replace input text with items content.
+			//if (settings.selectOnHover) {
+				$(selectors.listArea).find(_self.classes.listItem).hover(function() { // hover in
+					$(selectors.listArea).find(_self.classes.listItem).removeClass("active");
 					$(this).addClass("active");
-					$(_self.selectors.sTagsInput).text($(this).text()); // AK: originally used .val() for input field instead of .text().
-				}, function() {
+					if (settings.selectOnHover) {
+						_self.setInputText($(this).text());
+					}
+				}, function() { // hover out
 					$(this).removeClass("active");
-					if (!_self.settings.keepLastOnHoverTag) {
-						$(_self.selectors.sTagsInput).text(""); // AK: originally used .val() for input field instead of .text().
+					if (settings.selectOnHover && !settings.keepLastOnHoverTag) {
+						$(selectors.sTagsInput).text(""); // AK: originally used .val() for input field instead of .text().
 					}
 				});
-			}
+			//}
 
-			$(_self.selectors.listArea).find(_self.classes.listItem).click(function() {
+			$(selectors.listArea).find(_self.classes.listItem).mousedown(function(e) {
+				e.preventDefault(); // block stealing focus from input (and triggering blur event for input) before we process click event here.
+
+			}).click(function() {
 				_self.addTag($(this).data("val"));
-				$(_self.selectors.sTagsInput).text("").focus(); // AK: originally used .val() for input field instead of .text().
+				$(selectors.sTagsInput).text("").focus(); // AK: originally used .val() for input field instead of .text().
 			});
+			
 		},
 
 		isSuggestAction : function() {
@@ -387,7 +401,8 @@ var AmsifySuggestags;
 
 		upDownSuggestion : function(value, type) {
 			var _self     = this,
-			    isActive  = 0;
+			    isActive  = 0,
+                            $input = $(_self.selectors.sTagsInput);
 
 			$(_self.selectors.listArea).find(_self.classes.listItem + ":visible").each(function() {
 			        var $item = $(this);
@@ -402,7 +417,7 @@ var AmsifySuggestags;
 					if ($item.length) {
 						isActive = 1;
 						$item.addClass("active");
-						$(_self.selectors.sTagsInput).text($item.text()); // AK: originally used .val() for input field instead of .text().
+                                                _self.setInputText($item.text());
 					}
 					return false;
 				}
@@ -414,27 +429,48 @@ var AmsifySuggestags;
 
 				if ($item.length) {
                                   $item.addClass("active");
-				  $(_self.selectors.sTagsInput).text($item.text()); // AK: originally used .val() for input field instead of .text().
+				  _self.setInputText($item.text());
 				}
 			}
 		},
 
+		setInputText : function(value) {
+			var $input = $(this.selectors.sTagsInput),
+
+			    // this function moves input cursor to the end of editable <div>. For <input>'s we should use different code, see setSelectionRange().
+			    cursorToEnd = function() {
+		                var textLen = $input.text().length,
+                                    input = $input[0],
+                                    range = document.createRange(),
+                                    sel = window.getSelection();
+
+                                range.setStart(input.childNodes[0], textLen);
+                                range.collapse(true);
+                                sel.removeAllRanges();
+                                sel.addRange(range);
+                            };
+
+                        $input.text(value); // AK: originally used .val() for input field instead of .text().
+                        cursorToEnd();
+		},
+
 		suggestWhiteList : function(value, keycode, showAll) {
 			var _self = this,
+			    settings = _self.settings,
 			    found = 0,
-			    lower = value.toString().toLowerCase(),
+			    lower = value.toLowerCase(),
                             $listArea = $(this.selectors.listArea);
 
 			$listArea.find(_self.classes.noSuggestion).hide();
 
 			var $list = $listArea.find(this.classes.list);
-			$list.find(this.classes.listItem).each(function() {
+			$list.find(_self.classes.listItem).each(function() {
 				var dataVal = $(this).data("val");
 
 				if ($.isNumeric(dataVal)) {
-					dataVal = (-1 === value.toString().indexOf(".")) ? parseInt(dataVal): parseFloat(dataVal);
+					dataVal = (-1 === value.indexOf(".")) ? parseInt(dataVal) : parseFloat(dataVal);
 				}
-				if ((!!showAll || ~$(this).text().toString().toLowerCase().indexOf(lower)) && (-1 === $.inArray(dataVal, _self.tagNames))) {
+				if ((!!showAll || ~$(this).text().toLowerCase().indexOf(lower)) && (-1 === $.inArray(dataVal, _self.tagNames))) {
 					$(this).attr("data-show", 1);
 					found = 1;
 				}else {
@@ -447,16 +483,19 @@ var AmsifySuggestags;
 				/**
 				 * Sorting the suggestions
 				 */
-				$dataShow = $list.find(this.classes.listItem + "[data-show]");
-				if (lower) {
-					$dataShow.sort(function(a, b) {
-						return value.localeCompare($(a).text().toString());
-					}).appendTo($list);
-				}else {
-					$dataShow.sort(function(a, b) {
-						return $(a).text().toString().localeCompare($(b).text().toString());
-					}).appendTo($list);
+				var $dataShow = $list.find(this.classes.listItem + "[data-show]");
+
+				$dataShow.sort(function(a, b) {
+					return $(a).text().localeCompare($(b).text());
+				}).appendTo($list);
+
+				if (settings.highlightSuggestion) {
+					$list.find(_self.classes.listItem).each(function() {
+						var $el = $(this);
+						$el.html($el.text().replace(new RegExp("("+value+")", "gi"), "<b>$1</b>"));
+					});
 				}
+
 				$dataShow.each(function() {
 					$(this).show();
 				});
@@ -466,9 +505,13 @@ var AmsifySuggestags;
 				*/
 				var $item = $listArea.find(this.classes.listItem + ":visible");
 				if ((1 === $item.length) && (8 !== keycode)) {
-					if ((this.settings.whiteList && this.isSimilarText(value.toLowerCase(), $item.text().toLowerCase(), 40)) || this.isSimilarText(value.toLowerCase(), $item.text().toLowerCase(), 60)) {
+					if (settings.selectSimilar &&
+                                            ((settings.whiteList && this.isSimilarText(value.toLowerCase(), $item.text().toLowerCase(), 40)) ||
+                                             this.isSimilarText(value.toLowerCase(), $item.text().toLowerCase(), 60))) {
+						// this will highlight similar text, but not yet choose it.
 						$item.addClass("active");
-						$(this.selectors.sTagsInput).text($item.text()); // AK: originally used .val() for input field instead of .text().
+						// now let's replace typed text with similar. (AK: it's wrong, but this is as it was in original code, even without selectSimilar settings, added my me)
+						_self.setInputText($item.text());
 					}
 				}else {
 					$item.removeClass("active");
@@ -498,12 +541,23 @@ var AmsifySuggestags;
 		},
 
 		setRemoveEvent: function() {
-			var _self = this;
+			var _self = this,
+                            $input = $(_self.selectors.sTagsInput),
+                            $inputArea = $(_self.selectors.inputArea);
 
-			$(_self.selectors.inputArea).find(this.classes.removeTag).click(function(e) {
+			$inputArea.find(_self.classes.removeTag).click(function(e) {
 				e.stopImmediatePropagation();
-				$tagItem = $(this).closest(_self.classes.tagItem);
+
+				var $tagItem = $(this).closest(_self.classes.tagItem);
 				_self.removeTagByItem($tagItem, false);
+
+				if (!_self.tagNames.length) {
+					var placeholderText = $input.attr("data-placeholder");
+	                                if (placeholderText) // return back placeholder message
+						$input.attr("placeholder", placeholderText);
+				}
+
+				$(_self.selectors.sTagsInput).focus(); // set input focus
 			});
 		},
 
@@ -511,7 +565,7 @@ var AmsifySuggestags;
 			var _self     = this,
 			    listHTML  = "";
 
-			$.each(this.settings.suggestions, function(index, item) {
+			$.each(_self.settings.suggestions, function(index, item) {
 				var value = "",
 				    tag   = "";
 
@@ -534,55 +588,62 @@ var AmsifySuggestags;
 
 		addTag : function(value) {
 			if (value) {
-				var me = this,
-                                    settings = me.settings;
+				var _self = this,
+                                    settings = _self.settings,
+                                    $input = $(_self.selectors.sTagsInput),
+                                    placeholderText = $input.attr("placeholder");
+
+                                if (placeholderText) { // remove placholder message when at least 1 tag available.
+                                  $input.attr("data-placeholder", placeholderText);
+                                  $input.removeAttr("placeholder");
+                                }
 
 			        if (settings.prepareTag && ("function" === typeof settings.prepareTag))
                                   value = settings.prepareTag(value);
 
-				var $item = $('<span class="' + me.classes.tagItem.substring(1) + '" data-val="' + value + '">' + me.getTag(value) + " " + me.setIcon() + "</span>")
-                                                .insertBefore($(me.selectors.sTagsInput));
+				var $item = $('<span class="' + _self.classes.tagItem.substring(1) + '" data-val="' + value + '">' + _self.getTag(value) + " " + _self.setIcon() + "</span>")
+                                                .insertBefore($input);
 
 				if (settings.defaultTagClass)
 					$item.addClass(settings.defaultTagClass);
 
-				if ((-1 !== settings.tagLimit) && (0 < settings.tagLimit) && (me.tagNames.length >= settings.tagLimit)) {
-					me.animateRemove($item, true);
-					me.flashItem(value);
+				if ((-1 !== settings.tagLimit) && (0 < settings.tagLimit) && (_self.tagNames.length >= settings.tagLimit)) {
+					_self.animateRemove($item, true);
+					_self.flashItem(value);
 					return false;
 				}
 
-				var itemKey = me.getItemKey(value);
+				var itemKey = _self.getItemKey(value);
 				if (settings.whiteList && (-1 === itemKey)) {
-					me.animateRemove($item, true);
-					me.flashItem(value);
+					_self.animateRemove($item, true);
+					_self.flashItem(value);
 					return false;
 				}
 
-				if (me.isPresent(value)) {
-					me.animateRemove($item, true);
-					me.flashItem(value);
+				if (_self.isPresent(value)) {
+					_self.animateRemove($item, true);
+					_self.flashItem(value);
 				}else {
-					me.customStylings($item, itemKey);
+					_self.customStylings($item, itemKey);
 					var dataVal = value;
 					if ($.isNumeric(dataVal)) {
 						dataVal = (-1 === value.toString().indexOf(".")) ? parseInt(dataVal) : parseFloat(dataVal);
 					}
-					me.tagNames.push(dataVal);
-					me.setRemoveEvent();
-					me.setInputValue();
+					_self.tagNames.push(dataVal);
+					_self.setRemoveEvent();
+					_self.setInputValue();
 					if (settings.afterAdd && ("function" === typeof settings.afterAdd)) {
 						settings.afterAdd(value);
 					}
 				}
-				$(me.selector).trigger("suggestags.add", [value]);
-				$(me.selector).trigger("suggestags.change");
+				$(_self.selector).trigger("suggestags.add", [value]);
+				$(_self.selector).trigger("suggestags.change");
 				if (settings.triggerChange)
-					$(me.selector).trigger("change");
+					$(_self.selector).trigger("change");
 
-				$(me.selectors.listArea).find(me.classes.listItem).removeClass("active");
-				$(me.selectors.listArea).hide();
-				$(me.selectors.sTagsInput).removeClass(me.classes.readyToRemove.substring(1));
+				$(_self.selectors.listArea).find(_self.classes.listItem).removeClass("active");
+				$(_self.selectors.listArea).hide();
+				$input.removeClass(_self.classes.readyToRemove.substring(1));
 			}
 		},
 
@@ -620,25 +681,25 @@ var AmsifySuggestags;
 		},
 
 		customStylings : function(item, key) {
-			var me = this,
-                            settings = me.settings,
+			var _self = this,
+                            settings = _self.settings,
 			    $item = $(item),
-                            isCutom = false;
+                            isCustom = false;
 
 			if (settings.classes[key]) {
-				isCutom = true;
+				isCustom = true;
 				$item.addClass(settings.classes[key]);
 			}
 			if (settings.backgrounds[key]) {
-				isCutom = true;
+				isCustom = true;
 				$item.css("background", settings.backgrounds[key]);
 			}
 			if (settings.colors[key]) {
-				isCutom = true;
+				isCustom = true;
 				$item.css("color", settings.colors[key]);
 			}
-			if (!isCutom) {
-                                $item.addClass(me.classes.colBg.substring(1));
+			if (!isCustom) {
+                                $item.addClass(_self.classes.colBg.substring(1));
 		        }
 		},
 
@@ -654,20 +715,22 @@ var AmsifySuggestags;
 		},
 
 		removeTagByItem : function(item, animate) {
-			this.tagNames.splice($(item).index(), 1);
-			this.animateRemove(item, animate);
-			this.setInputValue();
+		        var _self = this;
 
-			$(this.selector).trigger("suggestags.remove", [$(item).attr("data-val")]);
-			$(this.selector).trigger("suggestags.change");
+			_self.tagNames.splice($(item).index(), 1);
+			_self.animateRemove(item, animate);
+			_self.setInputValue();
 
-			if (this.settings.triggerChange)
-				$(this.selector).trigger("change");
+			$(_self.selector).trigger("suggestags.remove", [$(item).attr("data-val")]);
+			$(_self.selector).trigger("suggestags.change");
 
-			if (("function" === this.settings.afterRemove) && typeof this.settings.afterRemove)
-				this.settings.afterRemove($(item).attr("data-val"));
+			if (_self.settings.triggerChange)
+				$(_self.selector).trigger("change");
 
-			$(this.selectors.sTagsInput).removeClass(this.classes.readyToRemove.substring(1));
+			if (("function" === _self.settings.afterRemove) && typeof _self.settings.afterRemove)
+				_self.settings.afterRemove($(item).attr("data-val"));
+
+			$(_self.selectors.sTagsInput).removeClass(_self.classes.readyToRemove.substring(1));
 		},
 
 		animateRemove : function(item, animate) {
@@ -685,7 +748,7 @@ var AmsifySuggestags;
 		},
 
 		flashItem : function(value) {
-			var $item = "";
+			var $item = false;
 
 			value = value.toString().toLowerCase();
 
@@ -726,10 +789,10 @@ var AmsifySuggestags;
 
 		fixCSS : function() {
 			if ("amsify" === this.settings.type) {
-				$(this.selectors.inputArea).addClass(this.classes.inputAreaDef.substring(1)).css({"padding": "5px 5px"});
+				$(this.selectors.inputArea).addClass(this.classes.inputAreaDef.substring(1)).css({padding: "5px 5px 3px" }); // -2px due to +2px
 			}else if ("materialize" === this.settings.type) {
-				$(this.selectors.inputArea).addClass(this.classes.inputAreaDef.substring(1)).css({"height": "auto", "padding": "5px 5px"});
-				$(this.selectors.sTagsInput).css({"margin": "0", "height": "auto"});
+				$(this.selectors.inputArea).addClass(this.classes.inputAreaDef.substring(1)).css({height: "auto", padding: "5px"});
+				$(this.selectors.sTagsInput).css({margin: 0, height: "auto"});
 			}
 		},
 
@@ -738,15 +801,15 @@ var AmsifySuggestags;
 		},
 
 		checkMethod : function() {
-			var me = this,
-                            $selector = $(me.selector),
+			var _self = this,
+                            $selector = $(_self.selector),
                             $findTags = $selector.next(this.classes.sTagsArea);
 
 			if ($findTags.length)
 				$findTags.remove();
 
 			$selector.show();
-			return !(("undefined" !== typeof me.method) && ("destroy" === me.method));
+			return !(("undefined" !== typeof _self.method) && ("destroy" === _self.method));
 		},
 
 		refresh : function() {
