@@ -1,21 +1,142 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Amsify42 Plugins - Suggestags</title>
-	<!-- CDN links -->
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jquery Suggestags - Amsify42</title>
+
+<!-- CDN links -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="./suggestags.css">
+
+<!-- Amsify Plugin -->
+<script type="text/javascript" src="./suggestags.min.js"></script>
 </head>
 <body>
-<div class="container">
-	<h1 class="text-center">Amsify42 Jquery Plugins</h1>
-	<hr>
-	<div class="row" style="padding-bottom: 300px;">
-		<h3>1. <a href="examples/index.html">Simple</a></h3>
-		<h3>2. <a href="examples/bootstrap/index.html">Bootstrap</a></h3>
-		<h3>3. <a href="examples/materialize/index.html">Materialize</a></h3>
+<header>
+	<div class="container">
+		<h1 class="text-center">Jquery Suggestags</h1>
 	</div>
+</header>
+<div class="container" style="min-height:360px;">
+	<div class="col-md-3"></div>
+	<div class="col-md-6 text-center">
+		<div class="form-group">
+			<input type="text" class="form-control" name="country"/>
+		</div>
+		<br><br>
+		<h4>Already Selected</h4>
+		<div class="form-group">
+			<input type="text" class="form-control" name="color" value="Orange,Black"/>
+		</div>
+		<h4>White Listed</h4>
+		<div class="form-group">
+			<input type="text" class="form-control" name="planets" value="Earth,Mars"/>
+		</div>
+		<h4>Tag Limit</h4>
+		<div class="form-group">
+			<input type="text" class="form-control" name="anything" value="one,two,three,four,five,six"/>
+		</div>
+		<h4><label for="spoken_language">And another demo with suggested languages. (Width 320px. This is clickable label.)</label></h4>
+		<div class="form-group">
+			<input type="text" class="form-control" name="spoken_language" id="spoken_language" style="width: 320px;" placeholder="Fluently spoken languages, comma separated" />
+		</div>
+	</div>
+	<div class="col-md-3"></div>
 </div>
+<footer>
+	<div class="container">
+		<h1 class="text-left">Usage</h1>
+		<pre>
+			<code>
+	$('input[name="country"]').amsifySuggestags({
+		type : 'amsify',
+		prepareTag: function(value) {
+			return value.charAt(0).toUpperCase() + value.slice(1); // ucfirst()
+		}
+	});
+	$('input[name="color"]').amsifySuggestags({
+		type : 'amsify',
+		suggestions: ['Black', 'White', 'Red', 'Blue', 'Green', 'Orange']
+	});
+	$('input[name="planets"]').amsifySuggestags({
+		type : 'amsify',
+		suggestions: ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupitor', 'Uranus', 'Neptune', 'Pluto'],
+		whiteList: true
+	});
+	$('input[name="anything"]').amsifySuggestags({
+		type : 'amsify',
+		tagLimit: 5
+	});
+
+        $('input[name="spoken_language"]').amsifySuggestags({
+               type: "amsify", // &times;
+               selectSimilar: false,
+               // this is totally random order. I just put world most popular languages.
+               suggestions: ["English", "Spanish", "Portuguese", "German", "French", "French Creole", "Dutch", "Italian", "Greek", "Albanian", "Hebrew",
+                             "Russian", "Ukrainian", "Belarusian", "Polish", "Czech", "Slovak", "Serbo-Croatian", "Bulgarian", "Macedonian", "Hungarian", "Romanian", "Catalan",
+                             "Finnish", "Swedish", "Norwegian",
+                             "Latvian", "Lithuanian", "Estonian",
+                             "Georgian", "Armenian", "Azerbaijani", "Kazakh",
+                             "Arabic", "Persian", "Chinese (Standard)", "Japanese", "Vietnamese", "Thai", "Khmer", "Lao",
+                             "Hindi", "Urdu", "Punjabi", "Bengali", "Marathi", "Telugu", "Tamil", "Gujarati", "Kannada", "Odia", "Malayalam", "Sanskrit",
+                             "Indonesian", "Malay", "Tagalog", "Turkish", "Tatar",
+                             "Afrikaans", "Swahili", "Yoruba", "Somali", "Xhosa", "Oromo", "Mossi", "Kongo", "Lingala", "Igbo", "Hausa", "Fulani", "Berber",
+                             "Navajo", "Yupik", "Sioux", "Apache", "Cherokee", "Choctaw", ],
+               prepareTag: function(value) {
+                   return value.ucwords();
+                   // return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(); // unexisting ucfirst(). See also ucwords();
+               },
+        });
+			</code>
+		</pre>
+	</div>
+</footer>
+<!-- -->
+<script type="text/javascript">
+	$('input[name="country"]').amsifySuggestags({
+		type : 'amsify',
+		prepareTag: function(value) {
+			return value.charAt(0).toUpperCase() + value.slice(1); // ucfirst()
+		}
+	});
+	$('input[name="color"]').amsifySuggestags({
+		type : 'amsify',
+		suggestions: ['Black', 'White', 'Red', 'Blue', 'Green', 'Orange']
+	});
+	$('input[name="planets"]').amsifySuggestags({
+		type : 'amsify',
+		suggestions: ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupitor', 'Uranus', 'Neptune', 'Pluto'],
+		whiteList: true
+	});
+	$('input[name="anything"]').amsifySuggestags({
+		type : 'amsify',
+		tagLimit: 5
+	});
+
+        $('input[name="spoken_language"]').amsifySuggestags({
+               type: "amsify", // &times;
+               selectSimilar: false,
+               // this is totally random order. I just put world most popular languages.
+               suggestions: ["English", "Spanish", "Portuguese", "German", "French", "French Creole", "Dutch", "Italian", "Greek", "Albanian", "Hebrew",
+                             "Russian", "Ukrainian", "Belarusian", "Polish", "Czech", "Slovak", "Serbo-Croatian", "Bulgarian", "Macedonian", "Hungarian", "Romanian", "Catalan",
+                             "Finnish", "Swedish", "Norwegian",
+                             "Latvian", "Lithuanian", "Estonian",
+                             "Georgian", "Armenian", "Azerbaijani", "Kazakh",
+                             "Arabic", "Persian", "Chinese (Standard)", "Japanese", "Vietnamese", "Thai", "Khmer", "Lao",
+                             "Hindi", "Urdu", "Punjabi", "Bengali", "Marathi", "Telugu", "Tamil", "Gujarati", "Kannada", "Odia", "Malayalam", "Sanskrit",
+                             "Indonesian", "Malay", "Tagalog", "Turkish", "Tatar",
+                             "Afrikaans", "Swahili", "Yoruba", "Somali", "Xhosa", "Oromo", "Mossi", "Kongo", "Lingala", "Igbo", "Hausa", "Fulani", "Berber",
+                             "Navajo", "Yupik", "Sioux", "Apache", "Cherokee", "Choctaw", ],
+               prepareTag: function(value) {
+                   // return value.ucwords();
+                   return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+               },
+        });
+
+</script>
+
+<a href="#" onclick="alert(AmsifySuggestags); return false;">test</a>
 </body>
 </html>
