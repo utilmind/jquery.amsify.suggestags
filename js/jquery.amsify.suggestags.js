@@ -253,9 +253,16 @@ var AmsifySuggestags;
 					else if (188 === e.keyCode)
 						key = ",";
 
-				var isDelimiter = (settings.delimiters && (-1 !== $.inArray(key, settings.delimiters)));
-				if (("Enter" === key) || ("," === key) || isDelimiter) {
-					appendTag(_self, $input, isDelimiter);
+				var isDelimiter = (settings.delimiters && (-1 !== $.inArray(key, settings.delimiters))),
+				    isEnter = key === "Enter";
+
+				if (("," === key) || isEnter || isDelimiter) {
+				        if (isEnter && ("" === inputText)) {
+						$input.closest("form").submit(); // act like a normal <input> box. Submit on enter.
+
+                                        }else {
+						appendTag(_self, $input, isDelimiter);
+					}
 
 				}else if (8 === e.keyCode && !$input.text()) { // AK: originally used .val() for input field instead of .text().
 					var removeClass = _self.classes.readyToRemove.substr(1);
@@ -523,13 +530,33 @@ var AmsifySuggestags;
 				var $dataShow = $list.find(this.classes.listItem + "[data-show]");
 
 				$dataShow.sort(function(a, b) {
-					return $(a).text().localeCompare($(b).text());
+				        a = $(a).text();
+                                        b = $(b).text();
+
+				        var lowerVal = value.toLowerCase(),
+                                            vLen = value.length,
+                                            startA = (a.substr(0, vLen).toLowerCase() === lowerVal),
+                                            startB = (b.substr(0, vLen).toLowerCase() === lowerVal);
+
+				        if (startA) {
+				          if (!startB)
+				            return -1;
+                                        }else if (startB)
+                                          return 1;
+
+					return a.localeCompare(b);
 				}).appendTo($list);
 
 				if (settings.highlightSuggestion) {
 					$list.find(_self.classes.listItem).each(function() {
-						var $el = $(this);
-						$el.html($el.text().replace(new RegExp("("+value+")", "gi"), "<b>$1</b>"));
+						var $el = $(this),
+
+                                                    // https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+                                                    escapeRegExp = function(str) {
+                                                        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+                                                    };
+
+						$el.html($el.text().replace(new RegExp("("+escapeRegExp(value)+")", "gi"), "<b>$1</b>"));
 					});
 				}
 
@@ -943,7 +970,7 @@ var AmsifySuggestags;
 			s1 = s1.toLowerCase();
 			s2 = s2.toLowerCase();
 
-			var i, costs = new Array();
+			var i, costs = [];
 			for (i = 0; i <= s1.length; ++i) {
 				var j, lastValue = i;
 				for (j = 0; j <= s2.length; ++j) {
