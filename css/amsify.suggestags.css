@@ -71,12 +71,14 @@
 	cursor: pointer;
 }
 
-.amsify-suggestags-area .amsify-suggestags-list {
+.amsify-suggestags-area
+.amsify-suggestags-list {
 	display: none;
 	position: absolute;
 	background: white;
 	border: 1px solid #dedede;
 	z-index: 999;/*1;*/
+	/* min-width: 200px; // AK: I decided that optimal minimum width can be sensitive to the kind of suggested items. I would better make this an option in JS code. */
 }
 
 .amsify-suggestags-area
@@ -84,6 +86,7 @@
 ul.amsify-list {
 	list-style: none;
 	padding: 3px 0;
+	margin: 0; /* AK: bootstrap adding 1em margin to the bottom of <UL>, but we don't need it here. */
 	max-height: 150px;
 	overflow-y: auto;
 }
