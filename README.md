@@ -6,6 +6,9 @@ UPD. Also
   1. added ```addTagOnBlur``` option to settings, so new tag automatically added on blur (unfocus) of input field.
   2. Added ```prepareTag``` callback, to modify tag (eg to change characters case) just before adding it. (In live demo by link below, the first input always have uppercased first character).
   3. Many other improvemements with suggested tags, fixed sorting of suggestions, added highlighting of typed snippet in suggested tags and much more. Plus many code cleanups.
+  4. Сorrect position and width of suggested tags list under the input field;
+  5. Redirect of focus to the input box when user clicks the control label.
+  6. Fix the buggy behavior of Shift + "." on non-latin keyboard layout, and many more.
 
 <b>Live demo is at https://utilmind.com/demos/2020/tagsinput/</b>
 
