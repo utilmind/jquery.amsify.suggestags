@@ -122,8 +122,9 @@ var AmsifySuggestags;
 
 			if (i = $selfSelector.attr("placeholder"))
 				_self.defaultLabel = i; // otherwise use default as is
-			_self.selectors.sTagsInput = $('<div contenteditable="plaintext-only" class="'+_self.classes.sTagsInput.substr(1)+'" placeholder="'+_self.defaultLabel+'">')
-                                                         .appendTo(_self.selectors.inputArea); //.attr("autocomplete", "off");
+			_self.selectors.sTagsInput = $('<div contenteditable="plaintext-only" class="'+_self.classes.sTagsInput.substr(1)+'" placeholder="'+_self.defaultLabel+'"' +
+                                                       ((i = $selfSelector.attr("spellcheck")) ? ' spellcheck="'+i+'"' : '') + '>')
+                                                           .appendTo(_self.selectors.inputArea); // also here was .attr("autocomplete", "off"), but this is unnamed <div>, not <input> anymore.
 
 			if ($selfSelector.attr("required")) {
 				$selfSelector.removeAttr("required");
