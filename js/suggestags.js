@@ -49,7 +49,6 @@ var AmsifySuggestags;
                 _self.classes       = {
                         sTagsArea     : ".amsify-suggestags-area",
                         inputArea     : ".amsify-suggestags-input-area",
-                        inputAreaDef  : ".amsify-suggestags-input-area-default",
                         focus         : ".amsify-focus",
                         sTagsInput    : ".amsify-suggestags-input",
                         listArea      : ".amsify-suggestags-list",
@@ -66,7 +65,6 @@ var AmsifySuggestags;
                 _self.selectors     = {
                         sTagsArea     : null,
                         inputArea     : null,
-                        inputAreaDef  : null,
                         sTagsInput    : null,
                         listArea      : null,
                         list          : null,
@@ -131,7 +129,10 @@ var AmsifySuggestags;
                         selectors.inputArea = $('<div class="' + _self.classes.inputArea.substr(1) + '"></div>')
                                                          .appendTo(selectors.sTagsArea);
 
-                        selectors.sTagsInput = $('<div contenteditable="plaintext-only" class="'+_self.classes.sTagsInput.substr(1)+'"' +
+                        selectors.sTagsInput = $('<div contenteditable="plaintext-only" class="' + _self.classes.sTagsInput.substr(1) +
+                                                         // ((i = $selfSelector.attr("class")) ? " " + i : "") +
+                                                         '"' +
+                                                         // ((i = $selfSelector.attr("style")) ? ' style="'+i+'"' : "") +
                                                          ((i = $selfSelector.attr("placeholder")) ? ' placeholder="'+i+'"' : "") +
                                                          ((i = $selfSelector.attr("spellcheck")) ? ' spellcheck="'+i+'"' : "") +
                                                        '></div>')
@@ -331,6 +332,7 @@ var AmsifySuggestags;
                 getTag : function(value) {
                         if (this.settings.suggestions.length) {
                                 var tag = value;
+
                                 $.each(this.settings.suggestions, function(key, item) {
                                         if (("object" === typeof item) && (item.value === value)) {
                                                 tag = item.tag;
@@ -340,7 +342,8 @@ var AmsifySuggestags;
                                                 return false; // break each()
                                         }
                                 });
-                                return tag;
+
+                                value = tag;
                         }
                         return value;
                 },
@@ -354,8 +357,8 @@ var AmsifySuggestags;
                                         if (("object" === typeof item) && item.tag.toLowerCase() === lower) {
                                                 value = item.value;
                                                 return false; // break each()
-                                        }
-                                        else if (item.toLowerCase() === lower) {
+
+                                        }else if (item.toLowerCase() === lower) {
                                                 return false; // break each()
                                         }
                                 });
@@ -366,6 +369,7 @@ var AmsifySuggestags;
 
                 processAjaxSuggestion : function(value, keycode) {
                         var _self = this,
+                            settings = _self.settings,
 
                             getActionURL = function(urlString) {
                                 var URL = "",
@@ -387,13 +391,13 @@ var AmsifySuggestags;
 
                             params          = {
                                                  existingTags: _self.tagNames,
-                                                 existing: _self.settings.suggestions,
+                                                 existing: settings.suggestions,
                                                  term: value,
                                               },
-                            ajaxConfig      = _self.settings.suggestionsAction.callbacks || {},
+                            ajaxConfig      = settings.suggestionsAction.callbacks || {},
 
                             ajaxFormParams  = {
-                                url : getActionURL(_self.settings.suggestionsAction.url),
+                                url : getActionURL(settings.suggestionsAction.url),
                             },
 
                             unique = function(list) {
@@ -433,42 +437,42 @@ var AmsifySuggestags;
                                 return result;
                             };
 
-                        if ("GET" === _self.settings.suggestionsAction.type) {
+                        if ("GET" === settings.suggestionsAction.type) {
                                 ajaxFormParams.url = ajaxFormParams.url + "?" + $.param(params);
                         }else {
-                                ajaxFormParams.type = _self.settings.suggestionsAction.type;
+                                ajaxFormParams.type = settings.suggestionsAction.type;
                                 ajaxFormParams.data = params;
                         }
 
-                        if (-1 !== _self.settings.suggestionsAction.timeout) {
-                                ajaxFormParams["timeout"] = _self.settings.suggestionsAction.timeout * 1000;
+                        if (-1 !== settings.suggestionsAction.timeout) {
+                                ajaxFormParams["timeout"] = settings.suggestionsAction.timeout * 1000;
                         }
 
-                        if (_self.settings.suggestionsAction.beforeSend !== undefined && ("function" === typeof _self.settings.suggestionsAction.beforeSend)) {
-                                ajaxFormParams["beforeSend"] = _self.settings.suggestionsAction.beforeSend;
+                        if (settings.suggestionsAction.beforeSend !== undefined && ("function" === typeof settings.suggestionsAction.beforeSend)) {
+                                ajaxFormParams["beforeSend"] = settings.suggestionsAction.beforeSend;
                         }
 
                         ajaxFormParams["success"] = function(data) {
                                 if (data && data.suggestions) {
-                                        _self.settings.suggestions = $.merge(_self.settings.suggestions, data.suggestions);
-                                        _self.settings.suggestions = _self.unique(_self.settings.suggestions);
+                                        settings.suggestions = $.merge(settings.suggestions, data.suggestions);
+                                        settings.suggestions = _self.unique(settings.suggestions);
                                         _self.updateSuggestionList();
                                         _self.setSuggestionsEvents();
                                         _self.suggestWhiteList(value, keycode);
                                 }
 
-                                if (_self.settings.suggestionsAction.success !== undefined && ("function" === typeof _self.settings.suggestionsAction.success)) {
-                                        _self.settings.suggestionsAction.success(data);
+                                if (settings.suggestionsAction.success !== undefined && ("function" === typeof settings.suggestionsAction.success)) {
+                                        settings.suggestionsAction.success(data);
                                 }
                         };
 
-                        if (_self.settings.suggestionsAction.error !== undefined && ("function" === typeof _self.settings.suggestionsAction.error)) {
-                                ajaxFormParams["error"] = _self.settings.suggestionsAction.error;
+                        if (settings.suggestionsAction.error !== undefined && ("function" === typeof settings.suggestionsAction.error)) {
+                                ajaxFormParams["error"] = settings.suggestionsAction.error;
                         }
 
                         ajaxFormParams["complete"] = function(data) {
-                                if (_self.settings.suggestionsAction.complete !== undefined && ("function" === typeof _self.settings.suggestionsAction.complete)) {
-                                        _self.settings.suggestionsAction.complete(data);
+                                if (settings.suggestionsAction.complete !== undefined && ("function" === typeof settings.suggestionsAction.complete)) {
+                                        settings.suggestionsAction.complete(data);
                                 }
 
                                 _self.ajaxActive = false;
@@ -622,10 +626,11 @@ var AmsifySuggestags;
                                         $(this).show();
                                 });
 
-                           /**
+                                /**
                                 * If only one item left in whitelist suggestions
                                 */
                                 var $item = $listArea.find(_self.classes.listItem + ":visible"),
+
                                     isSimilarText = function(_instance, str1, str2, perc) {
                                         return _instance.settings.checkSimilar ? !!(_instance.similarity(str1, str2) * 100 >= perc) : false;
                                     };
@@ -643,15 +648,18 @@ var AmsifySuggestags;
                                         $item.removeClass("active");
                                 }
 
-                                var leftPos = $(_self.selectors.sTagsInput).position().left - $tagsArea.position().left;
+                                // Calculate optimal position & width for dropdown box with suggestions
+                                var $inputArea = $(_self.selectors.inputArea),
+                                    inputAreaLeft = $inputArea.position().left,
+                                    leftPos = $(_self.selectors.sTagsInput).position().left - inputAreaLeft;
                                 $listArea.css({
-                                    left: $tagsArea.position().left + leftPos,
-                                    width: $tagsArea.width() - 3 - leftPos,
+                                    left: inputAreaLeft + leftPos,
+                                    width: $inputArea.width() - leftPos + 3,
                                 });
                                 $listArea.show();
 
                         }else {
-                                if (value && _self.settings.noSuggestionMsg) {
+                                if (value && settings.noSuggestionMsg) {
                                         $listArea.find(_self.classes.listItem).hide();
                                         $listArea.find(_self.classes.noSuggestion).show();
                                 }else {
@@ -722,7 +730,8 @@ var AmsifySuggestags;
                                   value = settings.prepareTag(value);
 
                                 var $item = $('<span class="' + _self.classes.tagItem.substr(1) + '" data-val="' + value + '">' + _self.getTag(value) + " " +
-                                                  '<span class="' + _self.classes.removeTag.substr(1) + '"'+ (settings.tooltipRemove ? ' title="'+settings.tooltipRemove+'"' : "") +'>' + settings.iconRemove + "</span>" +
+                                                  '<span class="' + _self.classes.removeTag.substr(1) + '"' +
+                                                      (settings.tooltipRemove ? ' title="'+settings.tooltipRemove+'"' : "") +'>' + settings.iconRemove + "</span>" +
                                                   "</span>")
                                               .insertBefore($input);
 
