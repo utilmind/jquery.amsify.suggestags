@@ -15,17 +15,17 @@
 }
 
 .amsify-suggestags-area
-.amsify-suggestags-input-area-default {
-	cursor: pointer;
-	border: 1px solid #cccccc;
-	min-height: 20px;
-	padding: 8px 5px 6px; /* bottom padding 2px less, to compensate bottom margin of ".amsify-select-tag" */
-}
-
-.amsify-suggestags-area
 .amsify-suggestags-input-area {
+/*
+	cursor: pointer;
+	border: 1px solid #ccc;
+ */
+	min-height: 20px;
+	padding: 5px 5px 3px !important; /* bottom padding 2px less, to compensate bottom margin of ".amsify-select-tag" */
+
 	text-align: left;
 	height: auto;
+        overflow-x: hidden; /* keep placeholder inside */
 }
 
 .amsify-suggestags-area
@@ -167,6 +167,7 @@ li.amsify-item-pad.active {
 
 .amsify-suggestags-input-area
 .amsify-select-tag {
+    cursor: default;
     padding: 2px 7px;
     margin: 0 4px 2px 0; /* +2 for multiline tags. But make inputArea 2px less in JS */
     -webkit-border-radius: 5px; /* originally 2px */
