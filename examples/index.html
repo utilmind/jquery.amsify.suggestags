@@ -51,38 +51,34 @@
 		<pre>
 			<code>
 	$('input[name="country"]').amsifySuggestags({
-		type : 'amsify',
 		prepareTag: function(value) {
 			return value.charAt(0).toUpperCase() + value.slice(1); // ucfirst()
 		}
 	});
 	$('input[name="color"]').amsifySuggestags({
-		type : 'amsify',
 		suggestions: ['Black', 'White', 'Red', 'Blue', 'Green', 'Orange']
 	});
 	$('input[name="planets"]').amsifySuggestags({
-		type : 'amsify',
 		suggestions: ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupitor', 'Uranus', 'Neptune', 'Pluto'],
 		whiteList: true
 	});
 	$('input[name="anything"]').amsifySuggestags({
-		type : 'amsify',
 		tagLimit: 5
 	});
 
         $('input[name="spoken_language"]').amsifySuggestags({
-               type: "amsify", // &times;
                selectSimilar: false,
                // this is totally random order. I just put world most popular languages.
                suggestions: ["English", "Spanish", "Portuguese", "German", "French", "French Creole", "Dutch", "Italian", "Greek", "Albanian", "Hebrew",
-                             "Russian", "Ukrainian", "Belarusian", "Polish", "Czech", "Slovak", "Serbo-Croatian", "Bulgarian", "Macedonian", "Hungarian", "Romanian", "Catalan",
-                             "Finnish", "Swedish", "Norwegian", "Danish", "Icelandic",
+                             "Russian", "Ukrainian", "Belarusian", "Polish", "Czech", "Slovak", "Slovene", "Serbo-Croatian", "Bulgarian", "Macedonian", "Hungarian", "Romanian",
+                             "Irish", "Scots", "Welsh", "Catalan", "Flemish",
+                             "Finnish", "Swedish", "Norwegian", "Danish", "Icelandic", "Basque",
                              "Latvian", "Lithuanian", "Estonian",
                              "Georgian", "Armenian", "Azerbaijani", "Kazakh",
-                             "Arabic", "Persian", "Chinese (Standard)", "Japanese", "Korean", "Vietnamese", "Thai", "Khmer", "Lao", "Mongolian",
+                             "Arabic", "Persian", "Chinese (Standard)", "Japanese", "Korean", "Vietnamese", "Thai", "Khmer", "Lao", "Mongolian", "Cebuano",
                              "Hindi", "Urdu", "Punjabi", "Bengali", "Marathi", "Telugu", "Tamil", "Gujarati", "Kannada", "Odia", "Malayalam", "Sanskrit",
                              "Indonesian", "Malay", "Javanese", "Burmese", "Tagalog", "Turkish", "Tatar", "Uzbek", "Tajik",
-                             "Afrikaans", "Swahili", "Yoruba", "Somali", "Xhosa", "Oromo", "Mossi", "Kongo", "Lingala", "Igbo", "Hausa", "Fulani", "Berber",
+                             "Afrikaans", "Swahili", "Yoruba", "Somali", "Xhosa", "Oromo", "Amharic", "Mossi", "Kongo", "Lingala", "Igbo", "Hausa", "Fulani", "Berber",
                              "Navajo", "Yupik", "Sioux", "Apache", "Cherokee", "Choctaw", ],
                prepareTag: function(value) {
                    return value.ucwords();
@@ -96,38 +92,34 @@
 <!-- -->
 <script type="text/javascript">
 	$('input[name="country"]').amsifySuggestags({
-		type : 'amsify',
 		prepareTag: function(value) {
 			return value.charAt(0).toUpperCase() + value.slice(1); // ucfirst()
 		}
 	});
 	$('input[name="color"]').amsifySuggestags({
-		type : 'amsify',
 		suggestions: ['Black', 'White', 'Red', 'Blue', 'Green', 'Orange']
 	});
 	$('input[name="planets"]').amsifySuggestags({
-		type : 'amsify',
 		suggestions: ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupitor', 'Uranus', 'Neptune', 'Pluto'],
 		whiteList: true
 	});
 	$('input[name="anything"]').amsifySuggestags({
-		type : 'amsify',
 		tagLimit: 5
 	});
 
         $('input[name="spoken_language"]').amsifySuggestags({
-               type: "amsify", // &times;
                selectSimilar: false,
                // this is totally random order. I just put world most popular languages.
                suggestions: ["English", "Spanish", "Portuguese", "German", "French", "French Creole", "Dutch", "Italian", "Greek", "Albanian", "Hebrew",
-                             "Russian", "Ukrainian", "Belarusian", "Polish", "Czech", "Slovak", "Serbo-Croatian", "Bulgarian", "Macedonian", "Hungarian", "Romanian", "Catalan",
-                             "Finnish", "Swedish", "Norwegian", "Danish", "Icelandic",
+                             "Russian", "Ukrainian", "Belarusian", "Polish", "Czech", "Slovak", "Slovene", "Serbo-Croatian", "Bulgarian", "Macedonian", "Hungarian", "Romanian",
+                             "Irish", "Scots", "Welsh", "Catalan", "Flemish",
+                             "Finnish", "Swedish", "Norwegian", "Danish", "Icelandic", "Basque",
                              "Latvian", "Lithuanian", "Estonian",
                              "Georgian", "Armenian", "Azerbaijani", "Kazakh",
-                             "Arabic", "Persian", "Chinese (Standard)", "Japanese", "Korean", "Vietnamese", "Thai", "Khmer", "Lao", "Mongolian",
+                             "Arabic", "Persian", "Chinese (Standard)", "Japanese", "Korean", "Vietnamese", "Thai", "Khmer", "Lao", "Mongolian", "Cebuano",
                              "Hindi", "Urdu", "Punjabi", "Bengali", "Marathi", "Telugu", "Tamil", "Gujarati", "Kannada", "Odia", "Malayalam", "Sanskrit",
                              "Indonesian", "Malay", "Javanese", "Burmese", "Tagalog", "Turkish", "Tatar", "Uzbek", "Tajik",
-                             "Afrikaans", "Swahili", "Yoruba", "Somali", "Xhosa", "Oromo", "Mossi", "Kongo", "Lingala", "Igbo", "Hausa", "Fulani", "Berber",
+                             "Afrikaans", "Swahili", "Yoruba", "Somali", "Xhosa", "Oromo", "Amharic", "Mossi", "Kongo", "Lingala", "Igbo", "Hausa", "Fulani", "Berber",
                              "Navajo", "Yupik", "Sioux", "Apache", "Cherokee", "Choctaw", ],
                prepareTag: function(value) {
                    // return value.ucwords();
@@ -137,6 +129,5 @@
 
 </script>
 
-<a href="#" onclick="alert(AmsifySuggestags); return false;">test</a>
 </body>
 </html>
