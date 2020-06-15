@@ -9,6 +9,8 @@ UPD. Also
   4. Сorrect position and width of suggested tags list under the input field;
   5. Redirect of focus to the input box when user clicks the control label.
   6. Fix the buggy behavior of quick typing of Shift + "." without holding shift on non-latin keyboard layout (that produces "," (comma character) in the input field, but don't recognized as comma in parameters of the event handler, and many more...
+  7. Removed defaultLabel, to specify text for placeholder. It useless. If you need placeholder -- specify it in HTML.
+  8. Removed "settings.type" and manipulations with CSS. It was wrong way. If you need to modify style -- do it with CSS, don't modify it with JS.
 
 <b>Live demo is at https://utilmind.com/demos/2020/tagsinput/</b>
 
