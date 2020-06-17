@@ -36,6 +36,7 @@ var AmsifySuggestags;
                         afterAdd          : {},
                         afterRemove       : {},
                         addTagOnBlur      : true,
+                        clearOnEsc        : true, // clear input when Escape pressed
                         selectOnHover     : false, // it's absolutely useless option, which makes me mad if I leave my cursor pointer little bit under the input box and trying to type something.
                         selectSimilar     : false,
                         triggerChange     : false,
@@ -199,6 +200,7 @@ var AmsifySuggestags;
                         var _self = this,
                             settings = _self.settings,
                             selectors = _self.selectors,
+                            $suggestList = $(selectors.listArea),
                             $input = $(selectors.sTagsInput);
 
                             appendTag = function(_instance, $input, isDelimiter) {
@@ -234,7 +236,7 @@ var AmsifySuggestags;
                                         if (settings.addTagOnBlur)
                                                 appendTag(_self, $input);
                                 }else {
-                                        $(selectors.listArea).hide();
+                                        $suggestList.hide();
                                 }
                         });
 
@@ -253,8 +255,16 @@ var AmsifySuggestags;
 
                                 }else if (13 === e.keyCode)
                                                 key = "Enter";
-                                        else if (188 === e.keyCode)
+                                      else if (27 === e.keyCode)
+                                                key = "Escape";
+                                      else if (188 === e.keyCode)
                                                 key = ",";
+
+                                if (("Escape" === key)) {
+                                        $suggestList.hide(); // hide the list of suggestions
+                                        if (settings.clearOnEsc) $input.text("");
+                                        return;
+                                }
 
                                 var isDelimiter = (settings.delimiters && (-1 !== $.inArray(key, settings.delimiters))),
                                     isEnter = key === "Enter";
@@ -274,7 +284,7 @@ var AmsifySuggestags;
                                         }else {
                                                 $input.addClass(removeClass); // so next time last item will be removed on backspace.
                                         }
-                                        $(selectors.listArea).hide();
+                                        $suggestList.hide();
                                         if (settings.showAllSuggestions) {
                                                 _self.suggestWhiteList("", 0, 1);
                                         }
@@ -380,7 +390,7 @@ var AmsifySuggestags;
 
                                 if (window !== undefined)
                                   URL = window.location.protocol + "//" + window.location.host;
- 
+
                                 if (isAbsoluteURL(urlString))
                                   URL = urlString;
                                 else
@@ -571,18 +581,19 @@ var AmsifySuggestags;
 
                         var $list = $listArea.find(this.classes.list);
                         $list.find(_self.classes.listItem).each(function() {
-                                var dataVal = $(this).data("val");
+                                var $item = $(this),
+                                    dataVal = $item.data("val");
 
                                 if ($.isNumeric(dataVal)) {
                                         dataVal = (-1 === value.indexOf(".")) ? parseInt(dataVal) : parseFloat(dataVal);
                                 }
-                                if ((!!showAll || ~$(this).text().toLowerCase().indexOf(lower)) && (-1 === $.inArray(dataVal, _self.tagNames))) {
-                                        $(this).attr("data-show", 1);
+                                if ((!!showAll || ~$item.text().toLowerCase().indexOf(lower)) && (-1 === $.inArray(dataVal, _self.tagNames))) {
+                                        $item.attr("data-show", 1);
                                         found = 1;
                                 }else {
-                                        $(this).removeAttr("data-show");
+                                        $item.removeAttr("data-show");
                                 }
-                                $(this).hide();
+                                $item.hide();
                         });
 
                         if (found) {
@@ -690,10 +701,11 @@ var AmsifySuggestags;
                 },
 
                 createList : function() {
-                        var _self     = this,
-                            listHTML  = "";
+                        var _self    = this,
+                            settings = _self.settings,
+                            listHTML = "";
 
-                        $.each(_self.settings.suggestions, function(index, item) {
+                        $.each(settings.suggestions, function(index, item) {
                                 var value = "",
                                     tag   = "";
 
@@ -708,8 +720,8 @@ var AmsifySuggestags;
                                 listHTML += '<li class="' + _self.classes.listItem.substr(1) + '" data-val="' + value + '">' + tag + '</li>';
                         });
 
-                        if (_self.settings.noSuggestionMsg)
-                                listHTML += '<li class="' + _self.classes.noSuggestion.substr(1) + '">' + _self.settings.noSuggestionMsg + '</li>';
+                        if (settings.noSuggestionMsg)
+                                listHTML += '<li class="' + _self.classes.noSuggestion.substr(1) + '">' + settings.noSuggestionMsg + '</li>';
 
                         return listHTML;
                 },
@@ -799,20 +811,21 @@ var AmsifySuggestags;
                 },
 
                 removeTagByItem : function(item, animate) { // item is HTML element
-                        var _self = this;
+                        var _self = this,
+                            settings = _self.settings;
 
                         _self.tagNames.splice($(item).index(), 1);
                         _self.removeItem(item, animate);
                         _self.updateInputValue();
 
-                        $(_self.selector).trigger("suggestags.remove", [$(item).attr("data-val")]);
-                        $(_self.selector).trigger("suggestags.change");
+                        $(_self.selector).trigger("suggestags.remove", [$(item).attr("data-val")])
+                                         .trigger("suggestags.change");
 
-                        if (_self.settings.triggerChange)
+                        if (settings.triggerChange)
                                 $(_self.selector).trigger("change");
 
-                        if (("function" === _self.settings.afterRemove) && typeof _self.settings.afterRemove)
-                                _self.settings.afterRemove($(item).attr("data-val"));
+                        if (("function" === settings.afterRemove) && typeof settings.afterRemove)
+                                settings.afterRemove($(item).attr("data-val"));
 
                         $(_self.selectors.sTagsInput).removeClass(_self.classes.readyToRemove.substr(1));
                 },
