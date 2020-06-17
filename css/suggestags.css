@@ -1,17 +1,15 @@
 .amsify-suggestags-input[placeholder]:empty:before {
-    content: attr(placeholder);
-    white-space: nowrap;
-    font-weight: normal;
-    font-style: italic;
-    color: #6c757d; /* bootstrap color placeholders */
-}
-
-.amsify-suggestags-input[placeholder]:empty:focus:before {
-    content: "";
+        content: attr(placeholder);
+        white-space: nowrap;
+        font-weight: normal;
+/*      font-style: italic; */
+        margin-left: .2rem; /* bootstrap */
+        color: #6c757d; /* bootstrap color placeholders */
 }
 
 .amsify-suggestags-area { /* added by AK */
 	width: 100%;
+        overflow-x: hidden; /* keep it inside of the dialog boxes */
 }
 
 .amsify-suggestags-area
