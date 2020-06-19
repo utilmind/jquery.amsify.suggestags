@@ -690,12 +690,6 @@ var AmsifySuggestags;
                                 var $tagItem = $(this).closest(_self.classes.tagItem);
                                 _self.removeTagByItem($tagItem, false);
 
-                                if (!_self.tagNames.length) {
-                                        var placeholderText = $input.attr("data-placeholder");
-                                        if (placeholderText) // return back placeholder message
-                                                $input.attr("placeholder", placeholderText);
-                                }
-
                                 $(_self.selectors.sTagsInput).focus(); // set input focus
                         });
                 },
@@ -812,7 +806,8 @@ var AmsifySuggestags;
 
                 removeTagByItem : function(item, animate) { // item is HTML element
                         var _self = this,
-                            settings = _self.settings;
+                            settings = _self.settings,
+                            $input = $(_self.selectors.sTagsInput);
 
                         _self.tagNames.splice($(item).index(), 1);
                         _self.removeItem(item, animate);
@@ -827,7 +822,13 @@ var AmsifySuggestags;
                         if (("function" === settings.afterRemove) && typeof settings.afterRemove)
                                 settings.afterRemove($(item).attr("data-val"));
 
-                        $(_self.selectors.sTagsInput).removeClass(_self.classes.readyToRemove.substr(1));
+                        $input.removeClass(_self.classes.readyToRemove.substr(1));
+
+                        if (!_self.tagNames.length) {
+                          var placeholderText = $input.attr("data-placeholder");
+                          if (placeholderText) // return back placeholder message
+                            $input.attr("placeholder", placeholderText);
+                        }
                 },
 
                 removeItem : function(item, animate) { // TODO: respect reduced animation.
