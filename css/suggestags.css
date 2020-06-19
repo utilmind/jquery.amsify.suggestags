@@ -8,7 +8,7 @@
 }
 
 .amsify-suggestags-area {
-	/* width: 100%; */
+	width: 100%; /* AK: I just want it. Use wrapper container if you don't need 100% width. */
         overflow-x: hidden; /* keep it inside of the dialog boxes */
 }
 
