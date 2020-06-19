@@ -2,14 +2,19 @@
         content: attr(placeholder);
         white-space: nowrap;
         font-weight: normal;
-/*      font-style: italic; */
+        /* font-style: italic; */
         margin-left: .2rem; /* bootstrap */
         color: #6c757d; /* bootstrap color placeholders */
 }
 
-.amsify-suggestags-area { /* added by AK */
-	width: 100%;
+.amsify-suggestags-area {
+	/* width: 100%; */
         overflow-x: hidden; /* keep it inside of the dialog boxes */
+}
+
+.amsify-suggestags-area:focus-within { /* style outer div on focus of the editable div. This is copy from regular Bootstrap v4. */
+        border-radius: 0.25rem;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .amsify-suggestags-area
