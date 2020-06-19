@@ -12,7 +12,9 @@
         overflow-x: hidden; /* keep it inside of the dialog boxes */
 }
 
-.amsify-suggestags-area:focus-within { /* style outer div on focus of the editable div. This is copy from regular Bootstrap v4. */
+.amsify-suggestags-area:focus-within { /* style outer div on focus of the editable div. This is copy from regular Bootstrap v4. 
+                                          Warning! "overflow: hidden" on wrapper element may destroy box-shadow effect.
+                                        */
         border-radius: 0.25rem;
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
