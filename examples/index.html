@@ -20,6 +20,17 @@
 		<h1 class="text-center">Bootstrap &amp; Jquery Suggestags</h1>
 	</div>
 </header>
+
+<style>
+#spoken_language div :focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+</style>
+
 <div class="container" style="min-height:360px;">
 	<div class="col-md-3"></div>
 	<div class="col-md-6 text-center">
@@ -41,8 +52,12 @@
 		</div>
 		<h4><label for="spoken_language">And another demo with suggested languages. (Width 320px. This is clickable label.)</label></h4>
 		<div class="form-group">
-			<input type="text" class="form-control font-weight-bold" name="spoken_language" id="spoken_language" style="width: 320px;" placeholder="Fluently spoken languages, comma separated" />
+                        <div style="width: 320px;">
+			<input type="text" class="form-control font-weight-bold" name="spoken_language" id="spoken_language" placeholder="Fluently spoken languages, comma separated" />
+                        </div>
 		</div>
+
+        	<input type="text" class="form-control" placeholder="This is regular bootstrap's form-control, not suggestags" />
 	</div>
 	<div class="col-md-3"></div>
 </div>
@@ -78,7 +93,7 @@
                              "Georgian", "Armenian", "Azerbaijani", "Kazakh",
                              "Arabic", "Persian", "Chinese (Standard)", "Japanese", "Korean", "Vietnamese", "Thai", "Khmer", "Lao", "Mongolian", "Cebuano",
                              "Hindi", "Urdu", "Punjabi", "Bengali", "Marathi", "Telugu", "Tamil", "Gujarati", "Kannada", "Odia", "Malayalam", "Sanskrit",
-                             "Indonesian", "Malay", "Javanese", "Burmese", "Tagalog", "Turkish", "Tatar", "Uzbek", "Tajik",
+                             "Indonesian", "Malay", "Javanese", "Burmese", "Tagalog", "Turkish", "Tatar", "Uzbek", "Tajik", "Kurdish",
                              "Afrikaans", "Swahili", "Yoruba", "Somali", "Xhosa", "Oromo", "Amharic", "Mossi", "Kongo", "Lingala", "Igbo", "Hausa", "Fulani", "Berber",
                              "Navajo", "Yupik", "Sioux", "Apache", "Cherokee", "Choctaw", ],
                prepareTag: function(value) {
@@ -119,7 +134,7 @@
                              "Georgian", "Armenian", "Azerbaijani", "Kazakh",
                              "Arabic", "Persian", "Chinese (Standard)", "Japanese", "Korean", "Vietnamese", "Thai", "Khmer", "Lao", "Mongolian", "Cebuano",
                              "Hindi", "Urdu", "Punjabi", "Bengali", "Marathi", "Telugu", "Tamil", "Gujarati", "Kannada", "Odia", "Malayalam", "Sanskrit",
-                             "Indonesian", "Malay", "Javanese", "Burmese", "Tagalog", "Turkish", "Tatar", "Uzbek", "Tajik",
+                             "Indonesian", "Malay", "Javanese", "Burmese", "Tagalog", "Turkish", "Tatar", "Uzbek", "Tajik", "Kurdish",
                              "Afrikaans", "Swahili", "Yoruba", "Somali", "Xhosa", "Oromo", "Amharic", "Mossi", "Kongo", "Lingala", "Igbo", "Hausa", "Fulani", "Berber",
                              "Navajo", "Yupik", "Sioux", "Apache", "Cherokee", "Choctaw", ],
                prepareTag: function(value) {
