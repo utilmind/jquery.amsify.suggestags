@@ -147,7 +147,7 @@ var AmsifySuggestags;
 
                         selectors.listArea  = $('<div class="'+_self.classes.listArea.substr(1)+'"></div>')
                                                          .appendTo(selectors.sTagsArea)
-                                                         .css("min-width", _self.settings.minSuggestionWidth);
+                                                         .css("min-width", _self.settings.minSuggestionWidth); // TODO: research, whether jQuery's css() are safe for Content-Security-Policy. If no -- set up style directly as described on https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
 
                         selectors.list      = $('<ul class="'+_self.classes.list.substr(1)+'"></ul>')
                                                          .appendTo(selectors.listArea);
@@ -663,7 +663,7 @@ var AmsifySuggestags;
                                 var $inputArea = $(_self.selectors.inputArea),
                                     inputAreaLeft = $inputArea.position().left,
                                     leftPos = $(_self.selectors.sTagsInput).position().left - inputAreaLeft;
-                                $listArea.css({
+                                $listArea.css({ // TODO: research, whether jQuery's css() are safe for Content-Security-Policy. If no -- set up style directly as described on https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
                                     left: inputAreaLeft + leftPos,
                                     width: $inputArea.width() - leftPos + 3,
                                 });
