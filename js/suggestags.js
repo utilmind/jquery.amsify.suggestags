@@ -24,7 +24,7 @@ var AmsifySuggestags;
                         iconRemove        : "&times;", // See also <i class="fa fa-times"></span> OR <i class="material-icons right">clear</i>.
                         tooltipRemove     : "Remove",
                         tagLimit          : -1,
-                        editableOnReachLimit : true,
+                        // editableOnReachLimit : true,
                         suggestions       : [],
                         suggestionsAction : {timeout: -1, minChars: 2, minChange: -1, type: "GET"},
                         minSuggestionWidth: "200px",
@@ -226,9 +226,9 @@ var AmsifySuggestags;
                                         _self.suggestWhiteList("", 0, 1);
 
                                 $inputParent.closest(_self.classes.inputArea).addClass(_self.classes.focus.substr(1));
-                        });
+                        })
 
-                        $input.blur(function() {
+                        .blur(function() {
                                 var $input = $(this); // we already have $input above, but this is for sure that we're in correct instance
 
                                 $input.closest(_self.classes.inputArea).removeClass(_self.classes.focus.substr(1));
@@ -239,9 +239,18 @@ var AmsifySuggestags;
                                 }else {
                                         $suggestList.hide();
                                 }
-                        });
+                        })
 
-                        $input.keyup(function(e) {
+                        .keydown(function(e) {
+                                var key = e.keyCode;
+
+                                // when limit reached we shouldn't allow to type anything, although control is focusable.
+                                if (_self.isLimitReached() && (8 !== key) && (13 !== key)) {
+                                      e.preventDefault();
+                                }
+                        })
+
+                        .keyup(function(e) {
                                 var $input = $(this), // we already have $input above, but this is for sure that we're in correct instance
                                     inputText = $input.text(),
                                     key = e.key;
@@ -273,14 +282,14 @@ var AmsifySuggestags;
                                 if (("," === key) || isEnter || isDelimiter) {
                                         if (isEnter && ("" === inputText)) {
                                                 $input.closest("form").submit(); // act like a normal <input> box. Submit on enter.
-
+                      
                                         }else {
                                                 appendTag(_self, $input, isDelimiter);
                                         }
 
                                 }else if (8 === e.keyCode && !$input.text()) { // AK: originally used .val() for input field instead of .text().
                                         var removeClass = _self.classes.readyToRemove.substr(1);
-                                        if ($input.hasClass(removeClass)) {
+                                        if (_self.isLimitReached() || $input.hasClass(removeClass)) {
                                                 _self.removeTagByItem($input.closest(_self.classes.inputArea).find(_self.classes.tagItem + ":last"), false);
                                         }else {
                                                 $input.addClass(removeClass); // so next time last item will be removed on backspace.
@@ -293,9 +302,9 @@ var AmsifySuggestags;
                                         $input.removeClass(_self.classes.readyToRemove.substr(1));
                                         _self.processWhiteList(e.keyCode, $input.text()); // AK: originally used .val() for input field instead of .text().
                                 }
-                        });
+                        })
 
-                        $input.keypress(function(e) {
+                        .keypress(function(e) {
                                 if (13 === e.keyCode) return false;
                         });
 
@@ -334,6 +343,10 @@ var AmsifySuggestags;
                                 $(selectors.sTagsInput).text("").focus(); // AK: originally used .val() for input field instead of .text().
                         });
 
+                },
+
+                isLimitReached: function() {
+                        return this.tagNames.length >= this.settings.tagLimit;
                 },
 
                 isSuggestAction : function() {
@@ -745,7 +758,7 @@ var AmsifySuggestags;
                                 if (settings.defaultTagClass)
                                         $item.addClass(settings.defaultTagClass);
 
-                                if ((-1 !== settings.tagLimit) && (0 < settings.tagLimit) && (_self.tagNames.length >= settings.tagLimit)) {
+                                if ((-1 !== settings.tagLimit) && (0 < settings.tagLimit) && _self.isLimitReached()) {
                                         _self.removeItem($item, 1);
                                         _self.flashItem(value);
                                         return false;
@@ -783,12 +796,12 @@ var AmsifySuggestags;
                                 $(_self.selectors.listArea).hide();
                                 $input.removeClass(_self.classes.readyToRemove.substr(1));
 
-                                // disable editable if we reach limit.
-                                if (!settings.editableOnReachLimit && (_self.tagNames.length >= settings.tagLimit)) {
+                                /* // disable editable if we reach limit.
+                                if (!settings.editableOnReachLimit && _self.isLimitReached()) {
                                   setTimeout(function(e) { // for some reason disabling of the editability will trigger another addTag(). So let's delay.
                                       $input.removeAttr("contenteditable");
                                   }, 0);
-                                }
+                                } */
                         }
                 },
 
@@ -836,8 +849,10 @@ var AmsifySuggestags;
                           var placeholderText = $input.attr("data-placeholder");
                           if (placeholderText) // return back placeholder message
                             $input.attr("placeholder", placeholderText);
-                            if (!settings.editableOnReachLimit && (_self.tagNames.length < settings.tagLimit))
+                            /*
+                            if (!settings.editableOnReachLimit && _self.isLimitReached())
                               $input.attr("contenteditable", "plaintext-only");
+                             */
                         }
                 },
 
