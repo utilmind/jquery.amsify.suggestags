@@ -246,7 +246,8 @@ var AmsifySuggestags;
 
                                 // when limit reached we shouldn't allow to type anything, although control is focusable.
                                 if (_self.isLimitReached() &&
-                                    (48 < key)) { // 48 is "0". All other keys before 0 is control keys (like backspace, enter, tab, escape etc), so the are OK.
+                                    ((48 < key) && // 48 is "0". All other keys before 0 is control keys (like backspace, enter, tab, escape etc), so the are OK.
+                                     !((key >= 112) && (key <= 123)))) { // F1..F12
                                       e.preventDefault();
                                 }
                         })
