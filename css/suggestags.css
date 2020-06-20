@@ -217,3 +217,16 @@ li.amsify-item-pad.active {
 	display: none;
 	opacity: 0.7;
 }
+
+
+/* ...and little "canonical" customization for color scheme.
+   Add .amsify-light class into <input> for "light" background.
+  */
+.amsify-suggestags-input-area.amsify-light
+.amsify-select-tag.col-bg {
+        background: #eee;
+}
+.amsify-light
+.amsify-remove-tag {
+        color: #999;
+}
