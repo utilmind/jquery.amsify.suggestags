@@ -245,7 +245,8 @@ var AmsifySuggestags;
                                 var key = e.keyCode;
 
                                 // when limit reached we shouldn't allow to type anything, although control is focusable.
-                                if (_self.isLimitReached() && (8 !== key) && (13 !== key)) {
+                                if (_self.isLimitReached() &&
+                                    (48 < key)) { // 48 is "0". All other keys before 0 is control keys (like backspace, enter, tab, escape etc), so the are OK.
                                       e.preventDefault();
                                 }
                         })
