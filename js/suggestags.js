@@ -349,8 +349,8 @@ var AmsifySuggestags;
 
                 isLimitReached: function() {
                         var _self = this,
-                            settings = _self.settings;
-                        return (0 < settings.tagLimit) && (_self.tagNames.length >= settings.tagLimit);
+                            tagLimit = _self.settings.tagLimit;
+                        return (0 < tagLimit) && (_self.tagNames.length >= tagLimit);
                 },
 
                 isSuggestAction : function() {
