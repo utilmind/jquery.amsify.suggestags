@@ -348,7 +348,9 @@ var AmsifySuggestags;
                 },
 
                 isLimitReached: function() {
-                        return this.tagNames.length >= this.settings.tagLimit;
+                        var _self = this,
+                            settings = _self.settings;
+                        return (0 < settings.tagLimit) && (_self.tagNames.length >= settings.tagLimit);
                 },
 
                 isSuggestAction : function() {
