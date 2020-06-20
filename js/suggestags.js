@@ -781,6 +781,13 @@ var AmsifySuggestags;
                                 $(_self.selectors.listArea).find(_self.classes.listItem).removeClass("active");
                                 $(_self.selectors.listArea).hide();
                                 $input.removeClass(_self.classes.readyToRemove.substr(1));
+
+                                // disable editable if we reach limit.
+                                if (_self.tagNames.length >= settings.tagLimit) {
+                                  setTimeout(function(e) { // for some reason disabling of the editability will trigger another addTag(). So let's delay.
+                                      $input.removeAttr("contenteditable");
+                                  }, 0);
+                                }
                         }
                 },
 
@@ -828,6 +835,8 @@ var AmsifySuggestags;
                           var placeholderText = $input.attr("data-placeholder");
                           if (placeholderText) // return back placeholder message
                             $input.attr("placeholder", placeholderText);
+                            if (_self.tagNames.length < settings.tagLimit)
+                              $input.attr("contenteditable", "plaintext-only");
                         }
                 },
 
