@@ -12,7 +12,7 @@ UPD. Also
   7. Removed defaultLabel, to specify text for placeholder. It useless. If you need placeholder -- specify it in HTML.
   8. Removed "settings.type" and manipulations with CSS. It was wrong way. If you need to modify style -- do it with CSS, don't modify it with JS.
   9. Added clearOnEsc option, to clear the input and hiding the list of suggestions on Escape keypress
- 10. Control is not editable if tag limit reached.
+ 10. Field is not editable if tag limit reached. Controlled by "editableOnReachLimit" option.
 
 <b>Live demo is at https://utilmind.com/demos/2020/tagsinput/</b>
 
