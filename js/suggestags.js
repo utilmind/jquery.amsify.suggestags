@@ -24,6 +24,7 @@ var AmsifySuggestags;
                         iconRemove        : "&times;", // See also <i class="fa fa-times"></span> OR <i class="material-icons right">clear</i>.
                         tooltipRemove     : "Remove",
                         tagLimit          : -1,
+                        editableOnReachLimit : true,
                         suggestions       : [],
                         suggestionsAction : {timeout: -1, minChars: 2, minChange: -1, type: "GET"},
                         minSuggestionWidth: "200px",
@@ -783,7 +784,7 @@ var AmsifySuggestags;
                                 $input.removeClass(_self.classes.readyToRemove.substr(1));
 
                                 // disable editable if we reach limit.
-                                if (_self.tagNames.length >= settings.tagLimit) {
+                                if (!settings.editableOnReachLimit && (_self.tagNames.length >= settings.tagLimit)) {
                                   setTimeout(function(e) { // for some reason disabling of the editability will trigger another addTag(). So let's delay.
                                       $input.removeAttr("contenteditable");
                                   }, 0);
@@ -835,7 +836,7 @@ var AmsifySuggestags;
                           var placeholderText = $input.attr("data-placeholder");
                           if (placeholderText) // return back placeholder message
                             $input.attr("placeholder", placeholderText);
-                            if (_self.tagNames.length < settings.tagLimit)
+                            if (!settings.editableOnReachLimit && (_self.tagNames.length < settings.tagLimit))
                               $input.attr("contenteditable", "plaintext-only");
                         }
                 },
