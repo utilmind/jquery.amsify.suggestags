@@ -746,8 +746,8 @@ var AmsifySuggestags;
                                     placeholderText = $input.attr("placeholder");
 
                                 if (placeholderText) { // remove placholder message when at least 1 tag available.
-                                  $input.attr("data-placeholder", placeholderText);
-                                  $input.removeAttr("placeholder");
+                                  $input.data("placeholder", placeholderText)
+                                        .removeAttr("placeholder");
                                 }
 
                                 if (settings.prepareTag && ("function" === typeof settings.prepareTag))
@@ -850,7 +850,7 @@ var AmsifySuggestags;
                         $input.removeClass(_self.classes.readyToRemove.substr(1));
 
                         if (!_self.tagNames.length) {
-                          var placeholderText = $input.attr("data-placeholder");
+                          var placeholderText = $input.data("placeholder");
                           if (placeholderText) // return back placeholder message
                             $input.attr("placeholder", placeholderText);
                             /*
@@ -864,7 +864,7 @@ var AmsifySuggestags;
                         item = $(item);
                         if (item.length) {
                           if (animate) {
-				$(item).addClass("disabled");
+                                $(item).addClass("disabled");
 
                                 setTimeout(function() {
                                         $(item).slideUp();
