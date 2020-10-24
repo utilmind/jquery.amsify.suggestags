@@ -6,10 +6,15 @@
         color: #6c757d; /* bootstrap color placeholders */
 
         /* avoid placeholder overflow */
+	overflow: hidden;
 	position: absolute;
 	left: .65rem;
 	right: .65rem;
-	overflow: hidden;
+	/* next to vertically align the placeholder */
+        top: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
 }
 
 .amsify-suggestags-input-area {
