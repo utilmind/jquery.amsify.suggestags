@@ -1,3 +1,7 @@
+<h3>AK 24.10.2020:</h3>
+  1. JS: Fixed left position of drop-down list.
+  2. CSS: Fixed vertical alignment of placeholder.
+
 <h3>AK 8.10.2020:</h3>
 CSS fixes. (To keep placeholder inside of the input control bounds.)
 
