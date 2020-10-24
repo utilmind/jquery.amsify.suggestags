@@ -680,7 +680,7 @@ var AmsifySuggestags;
                                 // Calculate optimal position & width for dropdown box with suggestions
                                 var $inputArea = $(_self.selectors.inputArea),
                                     inputAreaLeft = $inputArea.position().left,
-                                    leftPos = $(_self.selectors.sTagsInput).position().left - inputAreaLeft;
+                                    leftPos = $(_self.selectors.sTagsInput).position().left;// - inputAreaLeft;
                                 $listArea.css({ // TODO: research, whether jQuery's css() are safe for Content-Security-Policy. If no -- set up style directly as described on https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
                                     left: inputAreaLeft + leftPos,
                                     width: $inputArea.width() - leftPos + 3,
